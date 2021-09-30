@@ -1,5 +1,5 @@
 import { parseResponse } from './utils.ts'
-import { XResponse, Client, Config, Data } from './types.ts'
+import { FxetchResponse, Client, Config, Data } from './types.ts'
 
 // accept query params argument [x]
 // accept post data arg [x]

@@ -1,4 +1,4 @@
-import { XResponse, Client, Config, Data } from './types.ts'
+import { FxetchResponse, Client, Config, Data } from './types.ts'
 
 function pick<T extends object, U extends keyof T>(
   object: T,
@@ -20,7 +20,7 @@ const parseBody = async (res: Response) => {
   return res
 }
 
-export const parseResponse = async (res: Response): Promise<XResponse> => {
+export const parseResponse = async (res: Response): Promise<FxetchResponse> => {
   const parsed = {
     // rawRasponse: res,
     ...pick(res, ['status', 'statusText']),

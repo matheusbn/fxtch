@@ -2,9 +2,10 @@
   "name": "fxtch",
   "version": "1.0.0",
   "description": "A tiny wrapper around fetch for an easier API",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
-    "build": "rm -rf ./dist && tsc --project tsconfig.json",
+    "check-ts": "tsc --project tsconfig.json",
+    "build": "esbuild src/index.ts --minify --bundle --outfile=index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/matheusbn/axios-fetch#readme",
   "devDependencies": {
+    "esbuild": "^0.13.3",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.3"
   }

@@ -1,4 +1,4 @@
-export interface XResponse {
+export interface FxetchResponse {
   status: number
   statusText: string
   headers: Record<string, any>
@@ -6,13 +6,13 @@ export interface XResponse {
 }
 
 export interface Client {
-  get: (url: string, config: Config) => Promise<XResponse>
-  delete: (url: string, config?: Config) => Promise<XResponse>
-  head: (url: string, config?: Config) => Promise<XResponse>
-  options: (url: string, config?: Config) => Promise<XResponse>
-  post: (url: string, data?: Data, config?: Config) => Promise<XResponse>
-  patch: (url: string, data?: Data, config?: Config) => Promise<XResponse>
-  put: (url: string, data?: Data, config?: Config) => Promise<XResponse>
+  get: (url: string, config: Config) => Promise<FxetchResponse>
+  delete: (url: string, config?: Config) => Promise<FxetchResponse>
+  head: (url: string, config?: Config) => Promise<FxetchResponse>
+  options: (url: string, config?: Config) => Promise<FxetchResponse>
+  post: (url: string, data?: Data, config?: Config) => Promise<FxetchResponse>
+  patch: (url: string, data?: Data, config?: Config) => Promise<FxetchResponse>
+  put: (url: string, data?: Data, config?: Config) => Promise<FxetchResponse>
   create: (baseUrl: string) => Client
   baseUrl?: string
 }
