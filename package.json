@@ -1,0 +1,28 @@
+{
+  "name": "fxtch",
+  "version": "1.0.0",
+  "description": "A tiny wrapper around fetch for an easier API",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc --project tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matheusbn/axios-fetch.git"
+  },
+  "keywords": [
+    "fetch",
+    "request"
+  ],
+  "author": "matheusbnedel@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/matheusbn/axios-fetch/issues"
+  },
+  "homepage": "https://github.com/matheusbn/axios-fetch#readme",
+  "devDependencies": {
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.3"
+  }
+}
