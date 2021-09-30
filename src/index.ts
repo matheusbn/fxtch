@@ -63,7 +63,9 @@ const createClient = (): Client => {
     const urlObj = new URL(baseUrl + url)
 
     if (config.params)
-      urlObj.search = new URLSearchParams(config.params).toString()
+      urlObj.search = new URLSearchParams(config.params)
+        .toString()
+        .nonexisting()
 
     return request(urlObj)
   }
