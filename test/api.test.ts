@@ -49,36 +49,23 @@ describe('API', () => {
       expect.objectContaining({ method }),
     ]
 
-    it('#GET', async () => {
-      await fxtch.get('https://fake.com/')
+    for (let method of [
+      'get',
+      'post',
+      'patch',
+      'put',
+      'delete',
+      'head',
+      'options',
+    ]) {
+      it(`#${method}`, async () => {
+        await fxtch[method]('https://fake.com/')
 
-      expect(fetch).toHaveBeenCalledWith(...expectedParams('GET'))
-    })
-    it('#POST', async () => {
-      await fxtch.post('https://fake.com/')
-
-      expect(fetch).toHaveBeenCalledWith(...expectedParams('POST'))
-    })
-    it('#PATCH', async () => {
-      await fxtch.patch('https://fake.com/')
-
-      expect(fetch).toHaveBeenCalledWith(...expectedParams('PATCH'))
-    })
-    it('#PUT', async () => {
-      await fxtch.put('https://fake.com/')
-
-      expect(fetch).toHaveBeenCalledWith(...expectedParams('PUT'))
-    })
-    it('#HEAD', async () => {
-      await fxtch.head('https://fake.com/')
-
-      expect(fetch).toHaveBeenCalledWith(...expectedParams('HEAD'))
-    })
-    it('#OPTIONS', async () => {
-      await fxtch.options('https://fake.com/')
-
-      expect(fetch).toHaveBeenCalledWith(...expectedParams('OPTIONS'))
-    })
+        expect(fetch).toHaveBeenCalledWith(
+          ...expectedParams(method.toUpperCase())
+        )
+      })
+    }
 
     it('can be called directly as a GET request', async () => {
       await fxtch('https://fake.com/')
@@ -108,5 +95,45 @@ describe('API', () => {
         })
       )
     })
+
+    it('#query can be called multiple times', async () => {
+      await fxtch('https://fake.com/').query({ a: 2 }).query({ b: 4 })
+
+      expect(fetch).toHaveBeenCalledWith(
+        'https://fake.com/?a=2&b=4',
+        expect.objectContaining({ method: 'GET' })
+      )
+    })
+
+    it('#send can be called multiple times', async () => {
+      await fxtch.post('https://fake.com/').send({ a: 2 }).send({ b: 4 })
+
+      expect(fetch).toHaveBeenCalledWith(
+        'https://fake.com/',
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ a: 2, b: 4 }),
+        })
+      )
+    })
+
+    for (let method of [
+      'get',
+      'post',
+      'patch',
+      'put',
+      'delete',
+      'head',
+      'options',
+    ]) {
+      it(`#query can be used with #${method}`, async () => {
+        await fxtch[method]('https://fake.com/').query({ a: 2 })
+
+        expect(fetch).toHaveBeenCalledWith(
+          'https://fake.com/?a=2',
+          expect.objectContaining({ method: method.toUpperCase() })
+        )
+      })
+    }
   })
 })

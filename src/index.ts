@@ -50,7 +50,11 @@ class Client {
   }
 }
 
-function request(url: string | URL) {
+type Request = {
+  [key: string]: any
+  (url: string | URL): Client
+}
+const request: Request = function request(url) {
   const x = new Client()
 
   x.url = url
@@ -72,7 +76,7 @@ request.get = request
 request.post = createMethod('POST')
 request.patch = createMethod('PATCH')
 request.put = createMethod('PUT')
-request.del = createMethod('DELETE')
+request.delete = createMethod('DELETE')
 request.head = createMethod('HEAD')
 request.options = createMethod('OPTIONS')
 
