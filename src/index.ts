@@ -1,92 +1,75 @@
 import { parseResponse } from './utils'
-import { FxetchResponse, Client, Config, Data } from './types'
+import { FxetchResponse, Config, Data } from './types'
 
-// accept query params argument [x]
-// accept post data arg [x]
-// define response format [x]
-// return errors with catch? [x]
-// create client [x]
-// impelment other methods [x]
-// parse body options
-// blob
-// stream
-// formData
-// text
-// look into config options
-// test
+// https://stackoverflow.com/questions/29435262/regarding-promises-a-specification-what-is-the-difference-between-the-terms-t
 
-const createClient = (): Client => {
-  // const info: RequestInfo
-  const init: RequestInit & { headers: Headers } = {
+class Client {
+  // const a: RequestInfo
+  init: RequestInit & { headers: Headers } = {
     method: 'GET',
     headers: new Headers(),
   }
+  url: string | URL = ''
+  params: Data
+  data: Data
 
-  let baseUrl = ''
+  query(params: Data) {
+    this.params = { ...this.params, ...params }
 
-  const request = (
-    url: string | URL,
-    _config: Config = {},
-    method: string = 'GET'
-  ) => {
-    init.method = method
-
-    const input = url instanceof URL ? url.toString() : baseUrl + url
-    return fetch(input, init).then(parseResponse)
-  }
-
-  const createMethod =
-    (method: string) =>
-    (url: string, config: Config = {}) =>
-      request(url, config, method)
-
-  const createMutationMethod = (method: string) => {
-    return (url: string, data?: Data, config: Config = {}) => {
-      if (data) {
-        init.body = JSON.stringify(data)
-        init.headers.append('Content-Type', 'application/json')
-      }
-
-      return request(url, config, method)
-    }
-  }
-
-  const post = createMutationMethod('POST')
-  const patch = createMutationMethod('PATCH')
-  const put = createMutationMethod('PUT')
-
-  const del = createMethod('DELETE')
-  const head = createMethod('HEAD')
-  const options = createMethod('OPTIONS')
-
-  const get = (url: string, config: Config = {}) => {
-    const urlObj = new URL(baseUrl + url)
-
-    if (config.params)
-      urlObj.search = new URLSearchParams(config.params)
-        .toString()
-        .nonexisting()
-
-    return request(urlObj)
-  }
-
-  function create(this: Client, base: string) {
-    baseUrl = base
     return this
   }
 
-  return {
-    get,
-    post,
-    patch,
-    put,
-    delete: del,
-    head,
-    options,
-    create,
+  send(data: Data) {
+    this.data = { ...this.data, ...data }
+
+    return this
+  }
+
+  // set
+  // use?
+
+  then(
+    onResolve?: (response: FxetchResponse) => any,
+    onReject?: (response: FxetchResponse) => any
+  ) {
+    const url = new URL(this.url)
+    url.search = new URLSearchParams(this.params).toString()
+
+    if (this.data) {
+      this.init.body = JSON.stringify(this.data)
+      this.init.headers.append('Content-Type', 'application/json')
+    }
+
+    return fetch(url.toString(), this.init)
+      .then(parseResponse)
+      .then(onResolve, onReject)
   }
 }
 
-const x = createClient()
+function request(url: string | URL) {
+  const x = new Client()
 
-export default x
+  x.url = url
+
+  return x
+}
+
+function createMethod(method: string) {
+  return (url: string | URL) => {
+    const x = request(url)
+
+    x.init.method = method
+
+    return x
+  }
+}
+
+request.get = request
+request.post = createMethod('POST')
+request.patch = createMethod('PATCH')
+request.put = createMethod('PUT')
+request.del = createMethod('DELETE')
+request.head = createMethod('HEAD')
+request.options = createMethod('OPTIONS')
+
+export default request

@@ -20,4 +20,5 @@ export interface Client {
 export interface Config extends RequestInit {
   params?: Record<string, any>
 }
+
 export type Data = Record<string, any>
