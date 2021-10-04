@@ -16,7 +16,8 @@
   },
   "keywords": [
     "fetch",
-    "request"
+    "request",
+    "superagent"
   ],
   "author": "matheusbnedel@gmail.com",
   "license": "MIT",
