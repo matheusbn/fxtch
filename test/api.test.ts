@@ -9,6 +9,40 @@ describe('API', () => {
     fetchMock.resetMocks()
   })
 
+  describe('thenable', () => {
+    it('can receive resolve and reject callbacks', async () => {
+      const resolveCallback = jest.fn()
+      const rejectCallback = jest.fn()
+
+      await fxtch.get('https://fake.com/').then(resolveCallback, rejectCallback)
+
+      expect(resolveCallback).toHaveBeenCalledTimes(1)
+      expect(rejectCallback).not.toHaveBeenCalled()
+    })
+
+    it('reject works as second argument', async () => {
+      const resolveCallback = jest.fn()
+      const rejectCallback = jest.fn()
+
+      fetchMock.mockImplementation(() => Promise.reject())
+
+      await fxtch.get('https://fake.com/').then(resolveCallback, rejectCallback)
+
+      expect(resolveCallback).not.toHaveBeenCalled()
+      expect(rejectCallback).toHaveBeenCalledTimes(1)
+    })
+
+    it('works with .catch', async () => {
+      const rejectCallback = jest.fn()
+
+      fetchMock.mockImplementation(() => Promise.reject())
+
+      await fxtch.get('https://fake.com/').catch(rejectCallback)
+
+      expect(rejectCallback).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('request methods', () => {
     const expectedParams = (method: string) => [
       'https://fake.com/',

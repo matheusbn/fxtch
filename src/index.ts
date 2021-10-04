@@ -44,6 +44,10 @@ class Client {
       .then(parseResponse)
       .then(onResolve, onReject)
   }
+
+  catch(onReject?: (response: FxetchResponse) => any) {
+    return this.then(undefined, onReject)
+  }
 }
 
 function request(url: string | URL) {
