@@ -1,8 +1,6 @@
 import { parseResponse } from './utils'
 import { FxetchResponse, Config, Data } from './types'
 
-// https://stackoverflow.com/questions/29435262/regarding-promises-a-specification-what-is-the-difference-between-the-terms-t
-
 class Client {
   // const a: RequestInfo
   init: RequestInit & { headers: Headers } = {
@@ -25,7 +23,12 @@ class Client {
     return this
   }
 
-  // set
+  set(name: string, value: string) {
+    this.init.headers.set(name, value)
+
+    return this
+  }
+
   // use?
 
   then(
@@ -40,9 +43,8 @@ class Client {
       this.init.headers.append('Content-Type', 'application/json')
     }
 
-    return fetch(url.toString(), this.init)
-      .then(parseResponse)
-      .then(onResolve, onReject)
+    const input: RequestInfo = url.toString()
+    return fetch(input, this.init).then(parseResponse).then(onResolve, onReject)
   }
 
   catch(onReject?: (response: FxetchResponse) => any) {

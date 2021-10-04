@@ -75,27 +75,6 @@ describe('API', () => {
   })
 
   describe('builder methods', () => {
-    it('#query', async () => {
-      await fxtch('https://fake.com/').query({ a: 2 })
-
-      expect(fetch).toHaveBeenCalledWith(
-        'https://fake.com/?a=2',
-        expect.objectContaining({ method: 'GET' })
-      )
-    })
-
-    it('#send', async () => {
-      await fxtch.post('https://fake.com/').send({ a: 2 })
-
-      expect(fetch).toHaveBeenCalledWith(
-        'https://fake.com/',
-        expect.objectContaining({
-          method: 'POST',
-          body: JSON.stringify({ a: 2 }),
-        })
-      )
-    })
-
     it('#query can be called multiple times', async () => {
       await fxtch('https://fake.com/').query({ a: 2 }).query({ b: 4 })
 
@@ -115,6 +94,22 @@ describe('API', () => {
           body: JSON.stringify({ a: 2, b: 4 }),
         })
       )
+    })
+
+    it('#set can be called multiple times', async () => {
+      await fxtch
+        .post('https://fake.com/')
+        .set('API-Key', 'foobar')
+        .set('Accept', 'application/json')
+
+      const expectedHeaders = new Headers()
+
+      expectedHeaders.set('API-Key', 'foobar')
+      expectedHeaders.set('Accept', 'application/json')
+
+      const headers = fetchMock.mock.calls[0][1]?.headers as Headers
+
+      expect([...headers]).toEqual([...expectedHeaders])
     })
 
     for (let method of [
