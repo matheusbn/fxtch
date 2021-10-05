@@ -6,9 +6,17 @@ class Client {
     method: 'GET',
     headers: new Headers(),
   }
-  url: string | URL = ''
+
+  urlBase: string
+  url: string | URL | null
   params: Data
   data: Data
+
+  baseUrl(urlBase: string) {
+    this.urlBase = urlBase
+
+    return this
+  }
 
   query(params: Data) {
     this.params = { ...this.params, ...params }
@@ -42,7 +50,10 @@ class Client {
     onResolve?: (response: FxetchResponse) => any,
     onReject?: (response: FxetchResponse) => any
   ) {
-    const url = new URL(this.url)
+    if (!this.url) throw new Error('URL has not been set')
+
+    const url = new URL(this.url, this.urlBase)
+    this.url = null
     url.search = new URLSearchParams(this.params).toString()
 
     if (this.data) {
@@ -57,6 +68,25 @@ class Client {
   catch(onReject?: (response: FxetchResponse) => any) {
     return this.then(undefined, onReject)
   }
+
+  private createRequestMethod(method: string) {
+    return function (this: Client, url: string | URL) {
+      if (this.url) throw new Error('URL cannot be set twice')
+
+      this.init.method = method
+      this.url = url
+
+      return this
+    }
+  }
+
+  get = this.createRequestMethod('GET')
+  post = this.createRequestMethod('POST')
+  patch = this.createRequestMethod('PATCH')
+  put = this.createRequestMethod('PUT')
+  delete = this.createRequestMethod('DELETE')
+  head = this.createRequestMethod('HEAD')
+  options = this.createRequestMethod('OPTIONS')
 }
 
 const request = function request(url: string | URL) {
@@ -67,7 +97,7 @@ const request = function request(url: string | URL) {
   return x
 }
 
-function createMethod(method: string) {
+function createRequestMethod(method: string) {
   return (url: string | URL) => {
     const x = request(url)
 
@@ -78,11 +108,14 @@ function createMethod(method: string) {
 }
 
 request.get = request
-request.post = createMethod('POST')
-request.patch = createMethod('PATCH')
-request.put = createMethod('PUT')
-request.delete = createMethod('DELETE')
-request.head = createMethod('HEAD')
-request.options = createMethod('OPTIONS')
+request.post = createRequestMethod('POST')
+request.patch = createRequestMethod('PATCH')
+request.put = createRequestMethod('PUT')
+request.delete = createRequestMethod('DELETE')
+request.head = createRequestMethod('HEAD')
+request.options = createRequestMethod('OPTIONS')
+request.client = function client() {
+  return new Client()
+}
 
 export default request

@@ -145,4 +145,31 @@ describe('API', () => {
       expect([...headers]).toEqual([...expectedHeaders])
     })
   })
+
+  describe('client', () => {
+    test('can create client with default configs', async () => {
+      const api = fxtch
+        .client()
+        .baseUrl('https://fake.com/')
+        .set({ Authorization: 'blabla' })
+
+      await api.post('/users')
+      await api.post('/users')
+
+      const expectedHeaders = new Headers()
+      expectedHeaders.set('Authorization', 'blabla')
+
+      const headers = fetchMock.mock.calls[0][1]?.headers as Headers
+      const headers2 = fetchMock.mock.calls[1][1]?.headers as Headers
+
+      expect([...headers]).toEqual([...expectedHeaders])
+      expect([...headers2]).toEqual([...expectedHeaders])
+
+      expect(fetch).toHaveBeenCalledTimes(2)
+      expect(fetch).toHaveBeenCalledWith(
+        'https://fake.com/users',
+        expect.anything()
+      )
+    })
+  })
 })

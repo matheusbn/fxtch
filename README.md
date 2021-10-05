@@ -19,4 +19,12 @@ fxtch
   .get("https://example.com")
   .query({ limit: 50 })
   .then(console.log)
+
+const api = fxtch
+  .client()
+  .baseUrl('https://example.com/')
+  .set({ Authorization: 'blabla' })
+
+await api.post('/users')
+await api.post('/users')
 ```  
