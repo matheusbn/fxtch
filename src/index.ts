@@ -49,11 +49,7 @@ class Client {
   }
 }
 
-type Request = {
-  [key: string]: any
-  (url: string | URL): Client
-}
-const request: Request = function request(url) {
+const request = function request(url: string | URL) {
   const x = new Client()
 
   x.url = url

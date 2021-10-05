@@ -59,7 +59,7 @@ describe('API', () => {
       'options',
     ]) {
       it(`#${method}`, async () => {
-        await fxtch[method]('https://fake.com/')
+        await (fxtch as any)[method]('https://fake.com/')
 
         expect(fetch).toHaveBeenCalledWith(
           ...expectedParams(method.toUpperCase())
@@ -122,7 +122,7 @@ describe('API', () => {
       'options',
     ]) {
       it(`#query can be used with #${method}`, async () => {
-        await fxtch[method]('https://fake.com/').query({ a: 2 })
+        await (fxtch as any)[method]('https://fake.com/').query({ a: 2 })
 
         expect(fetch).toHaveBeenCalledWith(
           'https://fake.com/?a=2',
