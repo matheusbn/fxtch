@@ -9,3 +9,4 @@
 - change name from Client to request
 - accept object in set
 - accept base url
+- add CI
