@@ -1,16 +1,13 @@
 import fetchMock from 'jest-fetch-mock'
 import fxtch from '../src/index'
 
-// test then with arg combinations
-// test catch
-
 describe('API', () => {
   afterEach(() => {
     fetchMock.resetMocks()
   })
 
   describe('thenable', () => {
-    it('can receive resolve and reject callbacks', async () => {
+    test('can receive resolve and reject callbacks', async () => {
       const resolveCallback = jest.fn()
       const rejectCallback = jest.fn()
 
@@ -20,7 +17,7 @@ describe('API', () => {
       expect(rejectCallback).not.toHaveBeenCalled()
     })
 
-    it('reject works as second argument', async () => {
+    test('reject works as second argument', async () => {
       const resolveCallback = jest.fn()
       const rejectCallback = jest.fn()
 
@@ -32,7 +29,7 @@ describe('API', () => {
       expect(rejectCallback).toHaveBeenCalledTimes(1)
     })
 
-    it('works with .catch', async () => {
+    test('works with .catch', async () => {
       const rejectCallback = jest.fn()
 
       fetchMock.mockImplementation(() => Promise.reject())
@@ -58,7 +55,7 @@ describe('API', () => {
       'head',
       'options',
     ]) {
-      it(`#${method}`, async () => {
+      test(`#${method}`, async () => {
         await (fxtch as any)[method]('https://fake.com/')
 
         expect(fetch).toHaveBeenCalledWith(
@@ -67,7 +64,7 @@ describe('API', () => {
       })
     }
 
-    it('can be called directly as a GET request', async () => {
+    test('can be called directly as a GET request', async () => {
       await fxtch('https://fake.com/')
 
       expect(fetch).toHaveBeenCalledWith(...expectedParams('GET'))
@@ -75,7 +72,7 @@ describe('API', () => {
   })
 
   describe('builder methods', () => {
-    it('#query can be called multiple times', async () => {
+    test('#query can be called multiple times', async () => {
       await fxtch('https://fake.com/').query({ a: 2 }).query({ b: 4 })
 
       expect(fetch).toHaveBeenCalledWith(
@@ -84,7 +81,26 @@ describe('API', () => {
       )
     })
 
-    it('#send can be called multiple times', async () => {
+    for (let method of [
+      'get',
+      'post',
+      'patch',
+      'put',
+      'delete',
+      'head',
+      'options',
+    ]) {
+      test(`#query can be used with #${method}`, async () => {
+        await (fxtch as any)[method]('https://fake.com/').query({ a: 2 })
+
+        expect(fetch).toHaveBeenCalledWith(
+          'https://fake.com/?a=2',
+          expect.objectContaining({ method: method.toUpperCase() })
+        )
+      })
+    }
+
+    test('#send can be called multiple times', async () => {
       await fxtch.post('https://fake.com/').send({ a: 2 }).send({ b: 4 })
 
       expect(fetch).toHaveBeenCalledWith(
@@ -96,7 +112,7 @@ describe('API', () => {
       )
     })
 
-    it('#set can be called multiple times', async () => {
+    test('#set can be called multiple times', async () => {
       await fxtch
         .post('https://fake.com/')
         .set('API-Key', 'foobar')
@@ -112,7 +128,7 @@ describe('API', () => {
       expect([...headers]).toEqual([...expectedHeaders])
     })
 
-    it('#set can be called with object as argument', async () => {
+    test('#set can be called with object as argument', async () => {
       await fxtch
         .post('https://fake.com/')
         .set({ 'API-Key': 'foobar', Authorization: 'blabla' })
@@ -128,24 +144,5 @@ describe('API', () => {
 
       expect([...headers]).toEqual([...expectedHeaders])
     })
-
-    for (let method of [
-      'get',
-      'post',
-      'patch',
-      'put',
-      'delete',
-      'head',
-      'options',
-    ]) {
-      it(`#query can be used with #${method}`, async () => {
-        await (fxtch as any)[method]('https://fake.com/').query({ a: 2 })
-
-        expect(fetch).toHaveBeenCalledWith(
-          'https://fake.com/?a=2',
-          expect.objectContaining({ method: method.toUpperCase() })
-        )
-      })
-    }
   })
 })
