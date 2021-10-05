@@ -12,7 +12,7 @@ await fxtch("https://example.com")
 
 await fxtch
   .post("https://example.com")
-  .set("Authentication", "Bearer token")  
+  .set("Authorization", "Bearer <token>")  
   .send({ name: "Matheus" })
 
 fxtch
