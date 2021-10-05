@@ -1,5 +1,5 @@
 # fxtch
-A tiny wrapper around fetch for an easier API.
+A tiny (~1.2kb) wrapper around fetch for an easier API.
 
 ## Install
 
@@ -9,7 +9,6 @@ A tiny wrapper around fetch for an easier API.
 
 ```javascript
 await fxtch("https://example.com")
-
 
 await fxtch
   .post("https://example.com")
