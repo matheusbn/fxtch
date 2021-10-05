@@ -22,8 +22,18 @@ class Client {
     return this
   }
 
-  set(name: string, value: string) {
-    this.init.headers.set(name, value)
+  set(params: Record<string, string>): Client
+  set(name: string, value: string): Client
+  set(nameOrParams: string | Record<string, string>, value?: string) {
+    if (typeof nameOrParams === 'object') {
+      Object.entries(nameOrParams).forEach(([k, v]) =>
+        this.init.headers.set(k, v)
+      )
+    } else if (!value) {
+      throw new Error(`Missing value for header ${nameOrParams}`)
+    } else {
+      this.init.headers.set(nameOrParams, value)
+    }
 
     return this
   }

@@ -1,7 +1,6 @@
 # TODO
 - add methods:
   'type',
-- accept object in set
 - accept base url
 - parse other responses
 - set error responses

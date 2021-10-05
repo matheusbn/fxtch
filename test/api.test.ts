@@ -112,6 +112,23 @@ describe('API', () => {
       expect([...headers]).toEqual([...expectedHeaders])
     })
 
+    it('#set can be called with object as argument', async () => {
+      await fxtch
+        .post('https://fake.com/')
+        .set({ 'API-Key': 'foobar', Authorization: 'blabla' })
+        .set('Accept', 'application/json')
+
+      const expectedHeaders = new Headers()
+
+      expectedHeaders.set('API-Key', 'foobar')
+      expectedHeaders.set('Accept', 'application/json')
+      expectedHeaders.set('Authorization', 'blabla')
+
+      const headers = fetchMock.mock.calls[0][1]?.headers as Headers
+
+      expect([...headers]).toEqual([...expectedHeaders])
+    })
+
     for (let method of [
       'get',
       'post',
