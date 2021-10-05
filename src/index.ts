@@ -2,7 +2,6 @@ import { parseResponse } from './utils'
 import { FxetchResponse, Config, Data } from './types'
 
 class Client {
-  // const a: RequestInfo
   init: RequestInit & { headers: Headers } = {
     method: 'GET',
     headers: new Headers(),
@@ -28,8 +27,6 @@ class Client {
 
     return this
   }
-
-  // use?
 
   then(
     onResolve?: (response: FxetchResponse) => any,
