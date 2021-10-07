@@ -1,4 +1,4 @@
-import { FxetchResponse, Client, Config, Data } from './types'
+import { FxetchResponse, Client, Config, Data, StatusType } from './types'
 
 function pick<T extends object, U extends keyof T>(
   object: T,
@@ -10,23 +10,27 @@ function pick<T extends object, U extends keyof T>(
   >
 }
 
-const parseBody = async (res: Response) => {
+const parseBody = async (res: Response): Promise<any | undefined> => {
   const contentType = res.headers.get('content-type')
 
   if (contentType?.includes('application/json')) {
     return res.json()
   }
-
-  return res
 }
 
 export const parseResponse = async (res: Response): Promise<FxetchResponse> => {
-  const parsed = {
-    // rawRasponse: res,
-    ...pick(res, ['status', 'statusText']),
+  const parsed: FxetchResponse = {
+    raw: res,
+    redirected: res.redirected,
+    status: res.status,
+    statusText: res.statusText,
+    statusType: Math.trunc(res.status / 100) as StatusType,
+    type: res.type,
     headers: Object.fromEntries(res.headers.entries()),
-    data: await parseBody(res),
   }
+  const data = await parseBody(res)
+
+  if (data) parsed.data = data
 
   if (res.ok) return parsed
 

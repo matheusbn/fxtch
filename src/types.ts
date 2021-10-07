@@ -1,8 +1,14 @@
+export type StatusType = 1 | 2 | 3 | 4 | 5
+
 export interface FxetchResponse {
+  raw: Response
   status: number
   statusText: string
-  headers: Record<string, any>
+  redirected: boolean
+  type: ResponseType
+  headers: Record<string, string>
   data?: any
+  statusType: StatusType
 }
 
 export interface Client {

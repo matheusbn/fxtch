@@ -172,4 +172,38 @@ describe('API', () => {
       )
     })
   })
+
+  describe('response format', () => {
+    beforeEach(() => {
+      fetchMock.mockImplementationOnce(() => {
+        const res = new Response('{ "a":2 }', {
+          headers: { 'Content-Type': 'application/json' },
+        })
+
+        // for some reason the Response constructor of current lib
+        // doesn't have this property
+        Object.defineProperty(res, 'type', {
+          value: 'basic',
+        })
+
+        return Promise.resolve(res)
+      })
+    })
+    test('has expected properties', async () => {
+      const res = await fxtch.post('https://fake.com/')
+
+      expect(res.raw.constructor.name).toBe('Response')
+      expect(res.headers.constructor.name).not.toBe('Headers')
+      expect(res.status).toBe(200)
+      expect(res.redirected).toBe(false)
+      expect(res.type).toBe('basic')
+      expect(res.statusText).toBe('OK')
+      expect(res.statusType).toBe(2)
+      expect(typeof res.data).toBe('object')
+
+      Object.keys(res.headers).forEach(key =>
+        expect(key).toEqual(expect.not.stringMatching(/[A-Z]/))
+      )
+    })
+  })
 })

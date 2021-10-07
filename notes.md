@@ -1,10 +1,18 @@
 # TODO
-- parse other responses
+- serialize and parse
 - set error responses
+- fix module export
 - add type declarations
 - allow to extend chain methods
 - method to directly append to init with deep merge
 - add CI
-- .pipe streams
 - add methods:
   'type'
+- add coverage to readme
+
+- response:
+  - parsed as data
+  - body is still stream
+  - headers is an object with everything loweredc
+  - study content type
+- throws on different then type 2
