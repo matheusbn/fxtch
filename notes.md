@@ -11,8 +11,5 @@
 - add coverage to readme
 
 - response:
-  - parsed as data
-  - body is still stream
-  - headers is an object with everything loweredc
   - study content type
 - throws on different then type 2

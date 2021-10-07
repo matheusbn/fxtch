@@ -193,6 +193,8 @@ describe('API', () => {
       const res = await fxtch.post('https://fake.com/')
 
       expect(res.raw.constructor.name).toBe('Response')
+      expect(res.raw.bodyUsed).toBe(false)
+
       expect(res.headers.constructor.name).not.toBe('Headers')
       expect(res.status).toBe(200)
       expect(res.redirected).toBe(false)

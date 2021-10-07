@@ -14,7 +14,7 @@ const parseBody = async (res: Response): Promise<any | undefined> => {
   const contentType = res.headers.get('content-type')
 
   if (contentType?.includes('application/json')) {
-    return res.json()
+    return res.clone().json()
   }
 }
 
