@@ -1,17 +1,18 @@
 # TODO
-- serialize and parse
+- serialize
+  - formData
 - set error responses
-- fix module export
 - add type declarations
-- allow to extend chain methods
+- fix module export
+
 - method to directly append to init with deep merge
+- allow to extend chain methods
+
 - add CI
 - add methods:
   'type'
 - add coverage to readme
+- add options to add parser and serializer
 
-- response:
-  - study content type
-\
 
 - set option to not parse
