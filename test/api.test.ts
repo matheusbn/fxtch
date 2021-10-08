@@ -41,6 +41,11 @@ describe('API', () => {
 
       expect(rejectCallback).toHaveBeenCalledTimes(1)
     })
+
+    test('throws if called without a URL', () => {
+      // @ts-ignore
+      expect(() => fxtch().then()).toThrow('URL has not been set')
+    })
   })
 
   describe('request methods', () => {
@@ -71,6 +76,54 @@ describe('API', () => {
       await fxtch('https://fake.com/')
 
       expect(fetch).toHaveBeenCalledWith(...expectedParams('GET'))
+    })
+  })
+
+  describe('parsing and serializing', () => {
+    test('parses to JSON if content-type is application/json', async () => {
+      fetchMock.mockImplementationOnce(() => {
+        const res = new Response('{ "name": "Matheus" }', {
+          headers: { 'Content-Type': 'application/json' },
+        })
+
+        return Promise.resolve(res)
+      })
+
+      const res = await fxtch('https://fake.com/')
+
+      expect(res.data.name).toBe('Matheus')
+    })
+
+    test('parses to text with other response types', async () => {
+      fetchMock.mockImplementationOnce(() => {
+        const res = new Response('garbage', {
+          headers: { 'Content-Type': 'image/jpeg' },
+        })
+
+        return Promise.resolve(res)
+      })
+
+      const res = await fxtch('https://fake.com/')
+
+      expect(res.data).toBe('garbage')
+    })
+
+    test('parses to text when no content-type', async () => {
+      fetchMock.mockImplementationOnce(() => {
+        const res = new Response('matheus')
+
+        Object.defineProperty(res, 'headers', {
+          value: {
+            get: () => undefined,
+            entries: () => new Headers().entries(),
+          },
+        })
+        return Promise.resolve(res)
+      })
+
+      const res = await fxtch('https://fake.com/')
+
+      expect(res.data).toBe('matheus')
     })
   })
 
@@ -115,37 +168,46 @@ describe('API', () => {
       )
     })
 
-    test('#set can be called multiple times', async () => {
-      await fxtch
-        .post('https://fake.com/')
-        .set('API-Key', 'foobar')
-        .set('Accept', 'application/json')
+    describe('#set', () => {
+      test('can be called multiple times', async () => {
+        await fxtch
+          .post('https://fake.com/')
+          .set('API-Key', 'foobar')
+          .set('Accept', 'application/json')
 
-      const expectedHeaders = new Headers()
+        const expectedHeaders = new Headers()
 
-      expectedHeaders.set('API-Key', 'foobar')
-      expectedHeaders.set('Accept', 'application/json')
+        expectedHeaders.set('API-Key', 'foobar')
+        expectedHeaders.set('Accept', 'application/json')
 
-      const headers = fetchMock.mock.calls[0][1]?.headers as Headers
+        const headers = fetchMock.mock.calls[0][1]?.headers as Headers
 
-      expect([...headers]).toEqual([...expectedHeaders])
-    })
+        expect([...headers]).toEqual([...expectedHeaders])
+      })
 
-    test('#set can be called with object as argument', async () => {
-      await fxtch
-        .post('https://fake.com/')
-        .set({ 'API-Key': 'foobar', Authorization: 'blabla' })
-        .set('Accept', 'application/json')
+      test('can be called with object as argument', async () => {
+        await fxtch
+          .post('https://fake.com/')
+          .set({ 'API-Key': 'foobar', Authorization: 'blabla' })
+          .set('Accept', 'application/json')
 
-      const expectedHeaders = new Headers()
+        const expectedHeaders = new Headers()
 
-      expectedHeaders.set('API-Key', 'foobar')
-      expectedHeaders.set('Accept', 'application/json')
-      expectedHeaders.set('Authorization', 'blabla')
+        expectedHeaders.set('API-Key', 'foobar')
+        expectedHeaders.set('Accept', 'application/json')
+        expectedHeaders.set('Authorization', 'blabla')
 
-      const headers = fetchMock.mock.calls[0][1]?.headers as Headers
+        const headers = fetchMock.mock.calls[0][1]?.headers as Headers
 
-      expect([...headers]).toEqual([...expectedHeaders])
+        expect([...headers]).toEqual([...expectedHeaders])
+      })
+
+      test('throws if called with wrong arguments', async () => {
+        // @ts-ignore
+        expect(() => fxtch('https://fake.com/').set('api-key')).toThrow(
+          'Missing value for header api-key'
+        )
+      })
     })
   })
 
@@ -172,6 +234,12 @@ describe('API', () => {
       expect(fetch).toHaveBeenCalledWith(
         'https://fake.com/users',
         expect.anything()
+      )
+    })
+
+    test('throws when calling a request method more than once', () => {
+      expect(() => fxtch('https://fake.com/').get('https://fake.com/')).toThrow(
+        'URL cannot be set twice'
       )
     })
   })

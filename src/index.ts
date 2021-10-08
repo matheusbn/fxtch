@@ -1,4 +1,4 @@
-import { parseResponse } from './utils'
+import { parseResponse } from './parseResponse'
 import { FxetchResponse, Config, Data } from './types'
 import FxtchError from 'FxtchError'
 
