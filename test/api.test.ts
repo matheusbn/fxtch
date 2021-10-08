@@ -1,7 +1,10 @@
 import fetchMock from 'jest-fetch-mock'
 import fxtch from '../src/index'
+import FxtchError from '../src/FxtchError'
 
 describe('API', () => {
+  beforeEach(() => expect.hasAssertions())
+
   afterEach(() => {
     fetchMock.resetMocks()
   })
@@ -174,22 +177,21 @@ describe('API', () => {
   })
 
   describe('response format', () => {
-    beforeEach(() => {
+    test('has expected properties', async () => {
       fetchMock.mockImplementationOnce(() => {
         const res = new Response('{ "a":2 }', {
           headers: { 'Content-Type': 'application/json' },
         })
 
-        // for some reason the Response constructor of current lib
-        // doesn't have this property
+        // for some reason the Response constructor of the
+        // current TS lib doesn't have this property
         Object.defineProperty(res, 'type', {
           value: 'basic',
         })
 
         return Promise.resolve(res)
       })
-    })
-    test('has expected properties', async () => {
+
       const res = await fxtch.post('https://fake.com/')
 
       expect(res.raw.constructor.name).toBe('Response')
@@ -206,6 +208,23 @@ describe('API', () => {
       Object.keys(res.headers).forEach(key =>
         expect(key).toEqual(expect.not.stringMatching(/[A-Z]/))
       )
+    })
+
+    describe('error', () => {
+      test('rejects on status different then 2xx', async () => {
+        expect.assertions(8)
+
+        for (let status of [100, 300, 400, 500]) {
+          fetchMock.mockImplementationOnce(() =>
+            Promise.resolve(new Response('', { status }))
+          )
+
+          await fxtch.post('https://fake.com/').catch(error => {
+            expect(error instanceof Error).toBe(true)
+            expect((error as FxtchError).response.status).toBe(status)
+          })
+        }
+      })
     })
   })
 })

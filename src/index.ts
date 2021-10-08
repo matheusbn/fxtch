@@ -1,5 +1,6 @@
 import { parseResponse } from './utils'
 import { FxetchResponse, Config, Data } from './types'
+import FxtchError from 'FxtchError'
 
 class Client {
   init: RequestInit & { headers: Headers } = {
@@ -48,7 +49,7 @@ class Client {
 
   then(
     onResolve?: (response: FxetchResponse) => any,
-    onReject?: (response: FxetchResponse) => any
+    onReject?: (response: FxtchError | TypeError) => any
   ) {
     if (!this.url) throw new Error('URL has not been set')
 
@@ -65,7 +66,7 @@ class Client {
     return fetch(input, this.init).then(parseResponse).then(onResolve, onReject)
   }
 
-  catch(onReject?: (response: FxetchResponse) => any) {
+  catch(onReject?: (response: FxtchError | TypeError) => any) {
     return this.then(undefined, onReject)
   }
 

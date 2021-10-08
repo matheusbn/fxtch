@@ -10,4 +10,5 @@ export default {
   automock: false,
   resetMocks: false,
   setupFiles: ['./setupJest.ts'],
+  moduleDirectories: ['node_modules', 'src'],
 }

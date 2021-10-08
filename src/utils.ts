@@ -1,3 +1,4 @@
+import FxtchError from 'FxtchError'
 import { FxetchResponse, Client, Config, Data, StatusType } from './types'
 
 function pick<T extends object, U extends keyof T>(
@@ -34,7 +35,5 @@ export const parseResponse = async (res: Response): Promise<FxetchResponse> => {
 
   if (res.ok) return parsed
 
-  return Promise.reject({
-    response: parsed,
-  })
+  throw new FxtchError(res)
 }
