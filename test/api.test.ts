@@ -210,21 +210,19 @@ describe('API', () => {
       )
     })
 
-    describe('error', () => {
-      test('rejects on status different then 2xx', async () => {
-        expect.assertions(8)
+    test('rejects with FxtchError on status different then 2xx', async () => {
+      expect.assertions(8)
 
-        for (let status of [100, 300, 400, 500]) {
-          fetchMock.mockImplementationOnce(() =>
-            Promise.resolve(new Response('', { status }))
-          )
+      for (let status of [100, 300, 400, 500]) {
+        fetchMock.mockImplementationOnce(() =>
+          Promise.resolve(new Response('', { status }))
+        )
 
-          await fxtch.post('https://fake.com/').catch(error => {
-            expect(error instanceof Error).toBe(true)
-            expect((error as FxtchError).response.status).toBe(status)
-          })
-        }
-      })
+        await fxtch.post('https://fake.com/').catch(error => {
+          expect(error instanceof Error).toBe(true)
+          expect((error as FxtchError).response.status).toBe(status)
+        })
+      }
     })
   })
 })
