@@ -12,4 +12,6 @@
 
 - response:
   - study content type
-- throws on different then type 2
+\
+
+- set option to not parse
