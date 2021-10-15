@@ -1,0 +1,9 @@
+{
+  "entry": "./dist/index.js",
+  "outfile": "./dist/index.js",
+  "format": "esm",
+  "minify": true,
+  "bundle": true,
+  "analyze": true,
+  "allow-overwrite": true
+}
