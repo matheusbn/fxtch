@@ -1,5 +1,4 @@
-// import fxtch from './src'
-import fetch from 'cross-fetch'
+import fxtch from './dist/index.js'
 
 // /api/characters?category=Better+Call+Saul
 
@@ -20,22 +19,9 @@ import fetch from 'cross-fetch'
 ]
 
 async function main() {
-  // const res = await fxtch('https://www.breakingbadapi.com/api/characters')
+  const res = await fxtch('https://official-joke-api.appspot.com/random_joke')
 
-  // console.log(res)
-  // 'https://images.dog.ceo//breeds//spaniel-irish//n02102973_2763.jpg'
-
-  const resposne = await fetch(
-    'https://www.breakingbadapi.com/api/characters/5'
-  ).then(async r => {
-    console.log(r.headers.get('Content-Type'))
-    const text = await r.formData()
-    // const blob = await r.clone().blob()
-    // const formData = await r.clone().formData()
-
-    console.log(text)
-    // console.log(blob)
-  })
+  console.log(res)
 }
 
 main()

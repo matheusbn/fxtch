@@ -1,6 +1,6 @@
 import { parseResponse } from './parseResponse'
-import { FxtchResponse, Config, Data } from './types'
-import FxtchError from 'FxtchError'
+import { FxtchResponse, Data } from './types'
+import FxtchError from './FxtchError'
 
 class Client {
   init: RequestInit & { headers: Headers } = {
