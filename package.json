@@ -11,8 +11,9 @@
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register ./index.ts",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./index.ts",
+    "clean": "rm -rf ./dist",
     "tsc": "tsc --project tsconfig.json",
-    "build": "npm run tsc && esbuild $(esbuild-config)",
+    "build": "npm run clean && npm run tsc && esbuild $(esbuild-config)",
     "test": "jest",
     "test:watch": "jest --watch --coverage=false"
   },
