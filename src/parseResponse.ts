@@ -1,5 +1,5 @@
 import FxtchError from 'FxtchError'
-import { FxetchResponse, StatusType } from './types'
+import { FxtchResponse, StatusType } from './types'
 
 // function pick<T extends object, U extends keyof T>(
 //   object: T,
@@ -21,8 +21,8 @@ const parseBody = async (res: Response): Promise<any | undefined> => {
   return res.clone().text()
 }
 
-export const parseResponse = async (res: Response): Promise<FxetchResponse> => {
-  const parsed: FxetchResponse = {
+export const parseResponse = async (res: Response): Promise<FxtchResponse> => {
+  const parsed: FxtchResponse = {
     raw: res,
     redirected: res.redirected,
     status: res.status,

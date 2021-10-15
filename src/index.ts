@@ -1,5 +1,5 @@
 import { parseResponse } from './parseResponse'
-import { FxetchResponse, Config, Data } from './types'
+import { FxtchResponse, Config, Data } from './types'
 import FxtchError from 'FxtchError'
 
 class Client {
@@ -48,7 +48,7 @@ class Client {
   }
 
   then(
-    onResolve?: (response: FxetchResponse) => any,
+    onResolve?: (response: FxtchResponse) => any,
     onReject?: (response: FxtchError | TypeError) => any
   ) {
     if (!this.url) throw new Error('URL has not been set')
