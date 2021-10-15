@@ -2,12 +2,16 @@
   "name": "fxtch",
   "version": "0.1.0",
   "description": "A tiny wrapper around fetch for an easier API",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "files": [
+    "dist/*",
+    "src/*"
+  ],
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register ./index.ts",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./index.ts",
     "check-ts": "tsc --project tsconfig.json",
-    "build": "npm run check-ts && esbuild src/index.ts --minify --bundle --outfile=index.js",
+    "build": "npm run check-ts && esbuild src/index.ts --minify --bundle --outfile=./dist/index.js --format=esm",
     "test": "jest",
     "test:watch": "jest --watch --coverage=false"
   },
