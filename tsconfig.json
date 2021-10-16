@@ -3,7 +3,12 @@
     "baseUrl": "./src",
     "target": "es2018",
     "module": "esnext",
-    "lib": ["esnext", "esnext.asynciterable", "DOM", "DOM.Iterable"],
+    "lib": [
+      "esnext",
+      "esnext.asynciterable",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "skipLibCheck": true,
     "sourceMap": false,
     "outDir": "./dist",
@@ -23,9 +28,13 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "declaration": true,
-    "emitDeclarationOnly": false,
+    "emitDeclarationOnly": true,
     "declarationDir": "./dist/types"
   },
-  "exclude": ["node_modules"],
-  "include": ["./src/**/*.ts"]
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ]
 }

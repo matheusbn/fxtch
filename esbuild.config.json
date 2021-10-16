@@ -1,5 +1,5 @@
 {
-  "entry": "./dist/index.js",
+  "entry": "./src/index.ts",
   "outfile": "./dist/index.js",
   "format": "esm",
   "minify": true,
