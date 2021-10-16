@@ -11,7 +11,7 @@
     ],
     "skipLibCheck": true,
     "sourceMap": false,
-    "outDir": "./dist",
+    "outDir": "./lib",
     "moduleResolution": "node",
     "removeComments": true,
     "noImplicitAny": true,
@@ -29,7 +29,7 @@
     "resolveJsonModule": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationDir": "./dist/types"
+    "declarationDir": "./lib/types"
   },
   "exclude": [
     "node_modules"

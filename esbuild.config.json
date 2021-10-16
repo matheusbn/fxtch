@@ -1,6 +1,6 @@
 {
   "entry": "./src/index.ts",
-  "outfile": "./dist/index.js",
+  "outfile": "./lib/index.js",
   "format": "esm",
   "minify": true,
   "bundle": true,

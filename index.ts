@@ -1,4 +1,4 @@
-import fxtch from './dist/index.js'
+import fxtch from './lib/index.js'
 
 // /api/characters?category=Better+Call+Saul
 
