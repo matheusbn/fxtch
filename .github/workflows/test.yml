@@ -8,12 +8,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js 14.x
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
           cache: 'npm'
-      - run: npm i -g npm@8
-      - run: npm install
-      - run: npm run tsc
-      - run: npm test
+
+      - name: Update npm
+        run: npm i -g npm@8
+
+      - name: Check TypeScript
+        run: npm install
+
+      - name: Check TypeScript
+        run: npm run tsc
+
+      - name: Run tests
+        run: npm test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
