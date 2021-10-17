@@ -11,4 +11,12 @@ export default {
   resetMocks: false,
   setupFiles: ['./setupJest.ts'],
   moduleDirectories: ['node_modules', 'src'],
+  coverageThreshold: {
+    global: {
+      functions: 100,
+      statements: 100,
+      branches: 100,
+      lines: 100,
+    },
+  },
 }
