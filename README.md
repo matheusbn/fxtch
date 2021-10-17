@@ -1,5 +1,10 @@
 # fxtch
-A tiny (~1.2kb) wrapper around fetch for an easier API.
+
+![codecov](https://img.shields.io/codecov/c/gh/matheusbn/fxtch)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/fxtch)
+
+
+A tiny wrapper around fetch for an easier API.
 
 ## Install
 
