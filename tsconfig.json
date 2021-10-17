@@ -10,7 +10,7 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "outDir": "./lib",
     "moduleResolution": "node",
     "removeComments": true,

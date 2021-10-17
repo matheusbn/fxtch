@@ -1,17 +1,7 @@
 import FxtchError from 'FxtchError'
 import { FxtchResponse, StatusType } from './types'
 
-// function pick<T extends object, U extends keyof T>(
-//   object: T,
-//   props: Array<U>
-// ): Pick<T, U> {
-//   return props.reduce((acc, k) => ({ ...acc, [k]: object[k] }), {}) as Pick<
-//     T,
-//     U
-//   >
-// }
-
-const parseBody = async (res: Response): Promise<any | undefined> => {
+const parseBody = (res: Response) => {
   const contentType = res.headers.get('content-type')
 
   if (contentType?.includes('application/json')) {
