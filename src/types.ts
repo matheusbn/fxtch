@@ -10,5 +10,3 @@ export interface FxtchResponse {
   data?: any
   statusType: StatusType
 }
-
-export type Data = Record<string, any>

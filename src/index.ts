@@ -1,8 +1,8 @@
 import { parseResponse } from './parseResponse'
-import { FxtchResponse, Data } from './types'
+import { FxtchResponse } from './types'
 import FxtchError from './FxtchError'
 
-class Client {
+class Fxtch {
   init: RequestInit & { headers: Headers } = {
     method: 'GET',
     headers: new Headers(),
@@ -10,8 +10,8 @@ class Client {
 
   urlBase: string
   url: string | URL | null
-  params: Data
-  data: Data
+  params: Record<string, any>
+  data: Record<string, any>
 
   baseUrl(urlBase: string) {
     this.urlBase = urlBase
@@ -19,20 +19,20 @@ class Client {
     return this
   }
 
-  query(params: Data) {
+  query(params: Record<string, any>) {
     this.params = { ...this.params, ...params }
 
     return this
   }
 
-  send(data: Data) {
+  send(data: Record<string, any>) {
     this.data = { ...this.data, ...data }
 
     return this
   }
 
-  set(params: Record<string, string>): Client
-  set(name: string, value: string): Client
+  set(params: Record<string, string>): Fxtch
+  set(name: string, value: string): Fxtch
   set(nameOrParams: string | Record<string, string>, value?: string) {
     if (typeof nameOrParams === 'object') {
       Object.entries(nameOrParams).forEach(([k, v]) =>
@@ -71,7 +71,7 @@ class Client {
   }
 
   private createRequestMethod(method: string) {
-    return function (this: Client, url: string | URL) {
+    return function (this: Fxtch, url: string | URL) {
       if (this.url) throw new Error('URL cannot be set twice')
 
       this.init.method = method
@@ -91,7 +91,7 @@ class Client {
 }
 
 const request = function request(url: string | URL) {
-  const x = new Client()
+  const x = new Fxtch()
 
   x.url = url
 
@@ -116,7 +116,7 @@ request.delete = createRequestMethod('DELETE')
 request.head = createRequestMethod('HEAD')
 request.options = createRequestMethod('OPTIONS')
 request.client = function client() {
-  return new Client()
+  return new Fxtch()
 }
 
 export default request
