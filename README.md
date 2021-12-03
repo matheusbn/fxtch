@@ -5,7 +5,7 @@
 ![npm](https://img.shields.io/npm/v/fxtch)
 
 
-Minimal around fetch for an easier API.
+Minimal wrapper around fetch for an easier API.
 
 ## Install
 
