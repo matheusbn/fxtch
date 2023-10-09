@@ -9,7 +9,7 @@ Minimal wrapper around fetch for an easier API.
 
 ## Install
 
-`npm install fxtch`
+`npm i fxtch`
 
 ## Example
 
